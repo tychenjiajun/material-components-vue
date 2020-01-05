@@ -70,33 +70,34 @@ describe('Text Field', () => {
   })
 
   it('should warn of fullWidth text input with floating label', () => {
-    const warnfn = console.warn;
-    console.warn = jest.fn();
-    const wrapper = mount(TextField, {
+    const warnfn = console.warn
+    console.warn = jest.fn()
+    mount(TextField, {
       propsData: {
         fullWidth: true
-      },slots: {
-        default: "<m-floating-label>My Label</m-floating-label>"
+      },
+      slots: {
+        default: '<m-floating-label>My Label</m-floating-label>'
       },
       stubs: {
         'm-floating-label': FloatingLabel
       }
     })
-    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining("floating label"));
-    console.warn = warnfn;
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('floating label'))
+    console.warn = warnfn
   })
 
   it('should warn of fullWidth text input with outlined style', () => {
-    const warnfn = console.warn;
-    console.warn = jest.fn();
-    const wrapper = mount(TextField, {
+    const warnfn = console.warn
+    console.warn = jest.fn()
+    mount(TextField, {
       propsData: {
         fullWidth: true,
-        outlined: true,
+        outlined: true
       }
     })
-    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining("outlined style"));
-    console.warn = warnfn;
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('outlined style'))
+    console.warn = warnfn
   })
 
   it('should render and emit', () => {
@@ -135,12 +136,12 @@ describe('Text Field', () => {
   it('should render textarea', () => {
     const wrapper = mount(TextField, {
       propsData: {
-        textarea: true,
+        textarea: true
       }
-    });
+    })
 
-    expect(wrapper).toMatchSnapshot();
-    expect(wrapper.classes()).toContain('mdc-text-field--textarea');
+    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.classes()).toContain('mdc-text-field--textarea')
   })
 
   it('should render full-width textarea with outlined label', () => {
@@ -150,16 +151,16 @@ describe('Text Field', () => {
         fullWidth: true
       },
       slots: {
-        default: "<m-floating-label>My Label</m-floating-label>"
+        default: '<m-floating-label>My Label</m-floating-label>'
       },
       stubs: {
         'm-floating-label': FloatingLabel
       }
     })
 
-    expect(wrapper).toMatchSnapshot();
-    expect(wrapper.classes()).toContain('mdc-text-field--fullwidth');
-    expect(wrapper.classes()).toContain('mdc-text-field--textarea');
-    expect(wrapper.find('.mdc-notched-outline').exists()).toBe(true);
+    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.classes()).toContain('mdc-text-field--fullwidth')
+    expect(wrapper.classes()).toContain('mdc-text-field--textarea')
+    expect(wrapper.find('.mdc-notched-outline').exists()).toBe(true)
   })
 })

@@ -4,7 +4,7 @@
     class="mdc-select"
     @MDCSelect:change="onChange"
   >
-    <slot name="leadingIcon"/>
+    <slot name="leadingIcon" />
     <input
       v-if="enhanced && name"
       :name="name"
@@ -134,8 +134,8 @@ export default {
     },
     ariaLabelledby () {
       let ret = this.id
-      if (this.$slots['label'] && this.$slots['label'].length === 1) {
-        ret = ret + ' ' + this.$slots['label'][0].data.attrs.id
+      if (this.$slots.label && this.$slots.label.length === 1) {
+        ret = ret + ' ' + this.$slots.label[0].data.attrs.id
       }
       return ret
     }

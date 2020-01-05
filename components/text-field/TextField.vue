@@ -218,19 +218,19 @@ export default {
         }
       })
     },
-    checkConfig() {
-      if(this.fullWidth && !this.noLabel && !this.textarea) {
+    checkConfig () {
+      if (this.fullWidth && !this.noLabel && !this.textarea) {
         console.warn(
           'Do not use floating label with a full width text input. ' +
           'See https://github.com/material-components/material-components-web/tree/master/packages/mdc-textfield#full-width'
-        );
+        )
       }
 
-      if(this.fullWidth && this.outlined && !this.textarea) {
+      if (this.fullWidth && this.outlined && !this.textarea) {
         console.warn(
           'Do not use outlined style on full width text input. ' +
           'See: https://github.com/material-components/material-components-web/tree/master/packages/mdc-textfield#full-width'
-        );
+        )
       }
     },
     getLabel () {
