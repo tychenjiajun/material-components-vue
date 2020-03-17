@@ -1,15 +1,11 @@
 <template>
 <div>
   <ComponentSection>
-  <m-card
-    :outlined="radioProps[1].value"
-    :fullBleedAction="checkboxProps[2].value"
-    :primaryAction="checkboxProps[3].value">
+  <m-card>
     <m-card-media
-      slot="media"
       class="card-media card-media-content"
-      :square="checkboxProps[0].value"
-      :sixteenNine="checkboxProps[1].value">
+      :square="radioProps[0].value"
+      :sixteenNine="radioProps[1].value">
     </m-card-media>
     <section class="card-section">
     <m-typo-headline :level="6">
@@ -20,7 +16,6 @@
     </m-typo-body>
     </section>
     <m-button
-      interactive
       slot="actionButtons">
       action
     </m-button>
@@ -37,15 +32,10 @@ export default {
   data () {
     return {
       radioProps: [
-        { prop: 'baseline', value: true },
-        { prop: 'outlined', value: false }
-      ],
-      checkboxProps:  [
         { prop: 'square', value: false },
-        { prop: 'sixteenNine', value: true },
-        { prop: 'fullBleedAction', value: false },
-        { prop: 'primaryAction', value: false }
-      ]
+        { prop: 'sixteenNine', value: true }
+      ],
+      checkboxProps: []
     }
   } 
 }
@@ -55,7 +45,7 @@ export default {
 .card-section {
   display: flex;
   flex-direction: column;
-  align-items: left;
+  align-items: start;
   justify-content: flex-start;
   padding: 8px 16px;
   width: 300px;

@@ -1,5 +1,7 @@
 ## Dialog
 
+[Codepen example](https://codepen.io/chankcccc/pen/aeYpBJ)
+
 ### Markup
 
 ```html
@@ -25,6 +27,7 @@
 ```
 
 ### Script
+
 ```javascript
 data () {
   return {
@@ -38,6 +41,8 @@ methods: {
 }
 ```
 
+Close via setting `isDialogOpen` to false will emit `closing` and `closed` event without the `action` value in its payload.
+
 ### Props
 
 | Prop | Type | Default | Description |
@@ -45,22 +50,37 @@ methods: {
 | scrollable | Boolean | false | scrollable body |
 | open | Boolean | false | dialog starts in open state |
 | stacked | Boolean | true | whether the buttons are stacked vertically automatically |
+| escapeKeyAction | String | 'close' | Sets the action reflected when the Escape key is pressed. Setting to '' disables closing the dialog via Escape key. |
+| scrimClickAction | String | 'close' | Sets the action reflected when the scrim is clicked. Setting to '' disables closing the dialog via scrim click. |
+| ariaDescribedby | String | 'my-dialog-content' | `aria-describedby` of the dialog element and the `id` of the content element |
+| ariaLabelledby | String | 'my-dialog-title' | `aria-labelledby` of the dialog element and the `id` of the title element |
 
 ### Events
 
 | Event | Payload | Description |
 |-------|---------|-------------|
-| closed | { action: value } | emitted when dialog is closed |
+| opening | {} | emitted when dialog is opening |
+| opened | {} | emitted when dialog is opened |
+| closing | { action?: value } | emitted when dialog is closing |
+| closed | { action?: value } | emitted when dialog is closed |
+
+The complete order of events emitted in the open and close process is `opening`, `opened`, `closing`, `change` and `closed`
+
 
 ### Slots
 
 | Slot | Description |
 |------|-------------|
+| default | body of dialog without wrapping `mdc-dialog__content` class, not recommended to use |
 | header | header of dialog |
 | body | body of dialog |
-| acceptButton | accept button |
+| acceptButton | accept button and the default button |
 | cancelButton | cancel button |
 | dialogButton | additional button(s) |
+
+### Accessibility Concerns
+
+Dialog should have at least one focusable element, e.g. buttons in dialogButton slots. For providing messages, use `<m-snackbar>` instead.
 
 ### Reference
 

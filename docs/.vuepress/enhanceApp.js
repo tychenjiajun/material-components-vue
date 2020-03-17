@@ -27,6 +27,8 @@ import Switch from '../../components/switch'
 import LinearProgress from '../../components/linear-progress'
 import Snackbar from '../../components/snackbar'
 import Tabs from '../../components/tabs'
+import Ripple from '../../components/ripple'
+import Elevation from '../../components/elevation'
 
 export default ({
   Vue, // the version of Vue being used in the VuePress app
@@ -61,4 +63,6 @@ export default ({
   Vue.use(LinearProgress)
   Vue.use(Snackbar)
   Vue.use(Tabs)
+  Vue.use(Ripple)
+  Vue.use(Elevation)
 }

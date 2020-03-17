@@ -15,11 +15,32 @@
       >
         <slot />
       </div>
-      <div class="mdc-snackbar__actions">
+      <div
+        v-if="hasDismiss || actionButtonText !== ''"
+        class="mdc-snackbar__actions"
+      >
         <button
+          v-if="actionButtonText !== ''"
           class="mdc-button mdc-snackbar__action"
           type="button"
         />
+        <button
+          v-if="hasDismiss"
+          class="mdc-icon-button mdc-snackbar__dismiss"
+          :class="dismissClass"
+          title="Dismiss"
+        >
+          <slot
+            v-if="dismissClass === 'material-icons'"
+            name="dismiss"
+          >
+            close
+          </slot>
+          <slot
+            v-else
+            name="dismiss"
+          />
+        </button>
       </div>
     </div>
   </div>
@@ -28,7 +49,7 @@
 <script>
 import { MDCSnackbar } from '@material/snackbar'
 
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   mixins: [baseComponentMixin, themeClassMixin],
@@ -64,6 +85,14 @@ export default {
     stacked: {
       type: Boolean,
       default: false
+    },
+    hasDismiss: {
+      type: Boolean,
+      default: false
+    },
+    dismissClass: {
+      type: String,
+      default: 'material-icons'
     }
   },
   data () {
@@ -95,10 +124,10 @@ export default {
       this.model = this.mdcSnackbar.isOpen
     },
     actionButtonText () {
-      this.mdcSnackbar.actionButtonText = this.actionButtonText
+      if (this.actionButtonText && this.actionButtonText !== '') this.mdcSnackbar.actionButtonText = this.actionButtonText
     },
     labelText () {
-      this.mdcSnackbar.labelText = this.labelText
+      if (this.labelText && this.labelText !== '') this.mdcSnackbar.labelText = this.labelText
     },
     closeOnEscape () {
       this.mdcSnackbar.closeOnEscape = this.closeOnEscape
@@ -111,18 +140,18 @@ export default {
     this.mdcSnackbar = MDCSnackbar.attachTo(this.$el)
     this.mdcSnackbar.timeoutMs = this.timeoutMs
     this.mdcSnackbar.closeOnEscape = this.closeOnEscape
-    this.mdcSnackbar.labelText = this.labelText
-    this.mdcSnackbar.actionButtonText = this.actionButtonText
+    if (this.labelText && this.labelText !== '') this.mdcSnackbar.labelText = this.labelText
+    if (this.actionButtonText && this.actionButtonText !== '') this.mdcSnackbar.actionButtonText = this.actionButtonText
   },
   beforeDestroy () {
     this.mdcSnackbar.destroy()
   },
   methods: {
     onClosing (e) {
-      this.$emit('closing', e)
+      this.$emit('closing', e.detail)
     },
     onClosed (e) {
-      this.$emit('closed', e)
+      this.$emit('closed', e.detail)
     },
     onOpening () {
       this.$emit('opening')

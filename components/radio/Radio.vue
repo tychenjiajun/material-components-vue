@@ -1,15 +1,15 @@
 <template>
-  <div class="mdc-radio">
+  <div
+    class="mdc-radio"
+    :class="classes"
+  >
     <input
-      :id="id"
-      :checked="checked"
-      :class="classes"
-      :disabled="disabled"
-      :name="name"
+      ref="input"
       class="mdc-radio__native-control"
       type="radio"
-      v-bind="$attrs"
-      @change="onChange"
+      v-bind="attrs"
+      v-on="listeners"
+      @change="$emit('change', $event.target.value)"
     >
     <div class="mdc-radio__background">
       <div class="mdc-radio__outer-circle" />
@@ -21,34 +21,23 @@
 <script>
 import { MDCRadio } from '@material/radio'
 
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   mixins: [baseComponentMixin, themeClassMixin],
+  inject: {
+    formFieldInputAssigning: {
+      default: null
+    }
+  },
   model: {
     prop: 'picked',
     event: 'change'
   },
   props: {
-    checked: {
+    js: {
       type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    value: {
-      type: String,
-      default: ''
-    },
-    name: {
-      type: String,
-      default: ''
-    },
-    id: {
-      type: String,
-      default: ''
+      default: true
     }
   },
   data () {
@@ -59,30 +48,55 @@ export default {
   computed: {
     classes () {
       return {
-        'mdc-radio--disabled': this.disabled
+        'mdc-radio--disabled': this.$attrs.disabled != null
       }
+    },
+    attrs () {
+      const _attrs = this.$attrs
+      delete _attrs.picked
+      return _attrs
+    },
+    listeners () {
+      const _listeners = this.$listeners
+      delete _listeners.change
+      return _listeners
     }
   },
   watch: {
-    checked () {
-      this.mdcRadio.checked = this.checked
-    },
-    disabled () {
-      this.mdcRadio.disabled = this.disabled
+    js () {
+      this.reInstantiate()
     }
   },
   mounted () {
-    this.mdcRadio = MDCRadio.attachTo(this.$el)
-    this.mdcRadio.checked = this.checked
-    this.mdcRadio.disabled = this.disabled
-    this.mdcRadio.value = this.value
+    if (this.js) {
+      this.mdcRadio = MDCRadio.attachTo(this.$el)
+      if (this.formFieldInputAssigning instanceof Function) {
+        this.formFieldInputAssigning(this.mdcRadio)
+      }
+    }
   },
   beforeDestroy () {
-    this.mdcRadio.destroy()
+    if (this.js) {
+      this.mdcRadio.destroy()
+      if (this.formFieldInputAssigning instanceof Function) {
+        this.formFieldInputAssigning(undefined)
+      }
+    }
   },
   methods: {
-    onChange (event) {
-      this.$emit('change', this.mdcRadio.value)
+    reInstantiate () {
+      if (this.mdcRadio instanceof MDCRadio) {
+        this.mdcRadio.destroy()
+        this.mdcRadio = undefined
+      }
+      if (this.js) {
+        MDCRadio.attachTo(this.$el)
+        if (this.formFieldInputAssigning instanceof Function) {
+          this.formFieldInputAssigning(this.mdcRadio)
+        }
+      } else {
+        this.mdcRadio = undefined
+      }
     }
   }
 }

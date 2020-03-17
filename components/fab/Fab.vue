@@ -1,23 +1,43 @@
 <template>
   <button
+    v-if="href.length === 0"
     :class="classes"
     class="mdc-fab"
+    v-bind="$attrs"
     v-on="$listeners"
   >
     <slot name="icon" />
-    <div
-      v-if="extended"
+    <span
+      v-show="extended"
       class="mdc-fab__label"
     >
       <slot />
-    </div>
+    </span>
+    <slot name="trailingIcon" />
   </button>
+  <a
+    v-else
+    :href="href"
+    :class="classes"
+    class="mdc-fab"
+    v-bind="$attrs"
+    v-on="$listeners"
+  >
+    <slot name="icon" />
+    <span
+      v-show="extended"
+      class="mdc-fab__label"
+    >
+      <slot />
+    </span>
+    <slot name="trailingIcon" />
+  </a>
 </template>
 
 <script>
 import { MDCRipple } from '@material/ripple'
 
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   mixins: [baseComponentMixin, themeClassMixin],
@@ -34,15 +54,20 @@ export default {
       type: Boolean,
       default: false
     },
-    extended: {
+    ripple: {
       type: Boolean,
-      default: false
+      default: true
+    },
+    href: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
       mdcRipple: undefined,
-      slotObserver: undefined
+      slotObserver: undefined,
+      extended: false
     }
   },
   computed: {
@@ -57,10 +82,10 @@ export default {
   },
   watch: {
     classes () {
-      if (typeof this.mdcRipple !== 'undefined') {
-        this.mdcRipple.destroy()
-      }
-      this.mdcRipple = MDCRipple.attachTo(this.$el)
+      this.reInstantiateRipple()
+    },
+    ripple () {
+      this.reInstantiateRipple()
     }
   },
   mounted () {
@@ -68,24 +93,44 @@ export default {
     this.slotObserver = new MutationObserver(() => this.updateSlot())
     this.slotObserver.observe(this.$el, {
       childList: true,
-      subtree: true
+      subtree: true,
+      characterData: true
     })
-    this.mdcRipple = MDCRipple.attachTo(this.$el)
+    if (this.ripple) this.mdcRipple = MDCRipple.attachTo(this.$el)
   },
   beforeDestroy () {
-    this.slotObserver.disconnect()
-    if (typeof this.mdcRipple !== 'undefined') {
+    if (this.mdcRipple) {
       this.mdcRipple.destroy()
     }
+    this.slotObserver.disconnect()
   },
   methods: {
     updateSlot () {
       if (this.$slots.icon) {
         this.$slots.icon.map(n => {
-          if (n.elm.tagName.toUpperCase() !== 'SVG') {
-            n.elm.classList.add('mdc-fab__icon')
-          }
+          if (n.elm instanceof Element) n.elm.classList.add('mdc-fab__icon')
         })
+      }
+      if (this.$slots.trailingIcon) {
+        this.$slots.trailingIcon.map(n => {
+          if (n.elm instanceof Element) n.elm.classList.add('mdc-fab__icon')
+        })
+      }
+      this.extended = false
+      if (this.$slots.default) {
+        this.$slots.default.map(n => {
+          if (n.elm instanceof Element || n.text.trim().length > 0) this.extended = true
+        })
+      }
+    },
+    reInstantiateRipple () {
+      if (this.mdcRipple instanceof MDCRipple) {
+        this.mdcRipple.destroy()
+      }
+      if (this.ripple) {
+        MDCRipple.attachTo(this.$el)
+      } else {
+        this.mdcRipple = undefined
       }
     }
   }

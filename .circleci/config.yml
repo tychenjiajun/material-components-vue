@@ -1,0 +1,58 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run build:min
+  test:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run test
+  docs:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run docs:prod
+      - persist_to_workspace:
+          root: docs/.vuepress/
+          paths: dist
+  docs_deploy:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - attach_workspace:
+          at: docs/.vuepress
+      - add_ssh_keys:
+          fingerprints:
+            - "65:d8:ed:b9:bd:96:10:d0:99:95:06:d7:ae:73:7c:58"
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -D gh-pages
+            git config user.email "ci-build@circleci.com"
+            git config user.name "ci-build"
+      - run: ./node_modules/.bin/gh-pages --dist docs/.vuepress/dist
+workflows:
+  version: 2
+  test_build_docs:
+    jobs:
+      - test
+      - build
+      - docs
+      - docs_deploy:
+          requires:
+            - test
+            - build
+            - docs
+          filters:
+            branches:
+              only: master

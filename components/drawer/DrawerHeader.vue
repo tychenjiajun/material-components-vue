@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="$slots['default'] || title || subTitle"
+    v-if="$slots.default || title || subtitle"
     class="mdc-drawer__header"
   >
     <h3
@@ -10,26 +10,28 @@
       {{ title }}
     </h3>
     <h6
-      v-if="subTitle"
+      v-if="subtitle"
       class="mdc-drawer__subtitle"
     >
-      {{ subTitle }}
+      {{ subtitle }}
     </h6>
     <slot />
   </div>
 </template>
 
 <script>
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   mixins: [baseComponentMixin, themeClassMixin],
   props: {
     title: {
-      type: String
+      type: String,
+      default: ''
     },
-    subTitle: {
-      type: String
+    subtitle: {
+      type: String,
+      default: ''
     }
   }
 }

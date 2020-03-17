@@ -3,14 +3,17 @@
     :class="classes"
     class="mdc-card__media"
   >
-    <div class="mdc-card__media-content">
+    <div
+      v-if="$slots['default']"
+      class="mdc-card__media-content"
+    >
       <slot />
     </div>
   </div>
 </template>
 
 <script>
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   mixins: [baseComponentMixin, themeClassMixin],

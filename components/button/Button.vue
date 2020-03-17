@@ -9,7 +9,8 @@
     v-on="$listeners"
   >
     <slot name="icon" />
-    <slot />
+    <span class="mdc-button__label"><slot /></span>
+    <slot name="trailingIcon" />
   </a>
   <button
     v-else
@@ -19,13 +20,14 @@
     v-on="$listeners"
   >
     <slot name="icon" />
-    <slot />
+    <span class="mdc-button__label"><slot /></span>
+    <slot name="trailingIcon" />
   </button>
 </template>
 
 <script>
 import { MDCRipple } from '@material/ripple'
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   mixins: [baseComponentMixin, themeClassMixin],
@@ -49,6 +51,10 @@ export default {
     href: {
       type: String,
       default: ''
+    },
+    ripple: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -69,8 +75,10 @@ export default {
   },
   watch: {
     classes () {
-      this.mdcRipple.destroy()
-      this.mdcRipple = MDCRipple.attachTo(this.$el)
+      this.reInstantiateRipple()
+    },
+    ripple () {
+      this.reInstantiateRipple()
     }
   },
   mounted () {
@@ -80,11 +88,11 @@ export default {
       childList: true,
       subtree: true
     })
-    this.mdcRipple = MDCRipple.attachTo(this.$el)
+    if (this.ripple) this.mdcRipple = MDCRipple.attachTo(this.$el)
   },
   beforeDestroy () {
     this.slotObserver.disconnect()
-    if (typeof this.mdcRipple !== 'undefined') {
+    if (this.mdcRipple) {
       this.mdcRipple.destroy()
     }
   },
@@ -95,6 +103,25 @@ export default {
           n.elm.classList.add('mdc-button__icon')
           n.elm.setAttribute('aria-hidden', 'true')
         })
+      }
+      if (this.$slots.trailingIcon) {
+        this.$slots.trailingIcon.map(n => {
+          n.elm.classList.add('mdc-button__icon')
+          n.elm.setAttribute('aria-hidden', 'true')
+        })
+      }
+    },
+    reInstantiateRipple () {
+      if (this.ripple) {
+        if (this.mdcRipple) {
+          this.mdcRipple.destroy()
+        }
+        MDCRipple.attachTo(this.$el)
+      } else {
+        if (this.mdcRipple) {
+          this.mdcRipple.destroy()
+        }
+        this.mdcRipple = undefined
       }
     }
   }

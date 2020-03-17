@@ -5,13 +5,12 @@
 </p>
 
 <p align="center">
+  <a href="https://circleci.com/gh/matsp/material-components-vue"><img src="https://circleci.com/gh/matsp/material-components-vue.svg?style=svg"></a>
+  <a href="https://www.npmjs.com/package/material-components-vue"><img src="https://img.shields.io/npm/v/material-components-vue.svg"></a>
+  <a href="https://www.npmjs.com/package/material-components-web"><img src="https://img.shields.io/badge/mdc--web-3.2.0-green.svg"></a>
   <a href="https://github.com/matsp/material-components-vue/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/material-components-vue.svg"></a>
   <a href="https://www.npmjs.com/package/material-components-vue"><img src="https://img.shields.io/npm/dt/material-components-vue.svg"></a>
-  <a href="https://www.npmjs.com/package/material-components-vue"><img src="https://img.shields.io/npm/v/material-components-vue.svg"></a>
-  <a href="https://www.npmjs.com/package/material-components-web"><img src="https://img.shields.io/badge/mdc--web-1.0.1-green.svg"></a>
-  <a href="https://travis-ci.org/matsp/material-components-vue"><img src="https://travis-ci.org/matsp/material-components-vue.svg?branch=master"></a>
-  <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/matsp/material-components-vue.svg"></a>
-  <a href="https://discord.gg/2rXrRb5"><img src="https://img.shields.io/discord/456727669195800607.svg"></a>
+  <a href="https://www.npmjs.com/package/material-components-vue"><img src="https://img.shields.io/npm/dw/material-components-vue.svg"></a>
 </p>
 
 # Material Components Vue
@@ -24,7 +23,7 @@ https://matsp.github.io/material-components-vue
 
 ## Development
 
-This project is under active developement but I could need any help you can provide. Due a huge workload in my daily job I'am struggling with upgrading to the newest versions
+This project is under active developement but I need any help you can provide. Due to a huge workload in my daily job I'am struggling with upgrading to the newest versions
 of the upstream project: mdc-web.
 
 ## Links
@@ -37,7 +36,7 @@ of the upstream project: mdc-web.
 
 ## Support
 
-If you want to help feel free to submit issues or pull requests - you can also join the [chat](https://discord.gg/2rXrRb5) for questions. Every information that help to stabilize and improve the library is welcome!
+If you want to help feel free to submit issues or pull requests. Every information that help to stabilize and improve the library is welcome!
 
 When you want to support me you can buy me a :coffee: here :+1:
 

@@ -70,7 +70,7 @@
 <script>
 import { MDCRipple } from '@material/ripple'
 
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   mixins: [baseComponentMixin, themeClassMixin],
@@ -86,6 +86,14 @@ export default {
     href: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    ripple: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -98,14 +106,18 @@ export default {
     classes () {
       return {
         'mdc-list-item--activated': this.activated,
-        'mdc-list-item--selected': this.selected
+        'mdc-list-item--selected': this.selected,
+        'mdc-list-item--disabled': this.disabled
       }
     }
   },
   watch: {
     classes () {
-      this.mdcRipple.destroy()
-      this.mdcRipple = MDCRipple.attachTo(this.$el)
+      this.reInstantiateRipple()
+      if (this.selected) this.$el.setAttribute('aria-selected', 'true')
+    },
+    ripple () {
+      this.reInstantiateRipple()
     }
   },
   mounted () {
@@ -115,7 +127,8 @@ export default {
       childList: true,
       subtree: true
     })
-    this.mdcRipple = MDCRipple.attachTo(this.$el)
+    if (this.ripple) this.mdcRipple = MDCRipple.attachTo(this.$el)
+    if (this.selected) this.$el.setAttribute('aria-selected', 'true')
   },
   beforeDestroy () {
     this.slotObserver.disconnect()
@@ -128,15 +141,25 @@ export default {
       if (this.$slots.graphic) {
         this.$slots.graphic.map(n => {
           n.elm.classList.add('mdc-list-item__graphic')
-          if (this.$el.getAttribute('role') === 'menuitem') {
-            n.elm.classList.add('mdc-menu__selection-group-icon')
-          }
         })
       }
       if (this.$slots.meta) {
         this.$slots.meta.map(n => {
           n.elm.classList.add('mdc-list-item__meta')
         })
+      }
+    },
+    reInstantiateRipple () {
+      if (this.ripple) {
+        if (this.mdcRipple) {
+          this.mdcRipple.destroy()
+        }
+        MDCRipple.attachTo(this.$el)
+      } else {
+        if (this.mdcRipple) {
+          this.mdcRipple.destroy()
+        }
+        this.mdcRipple = undefined
       }
     }
   }

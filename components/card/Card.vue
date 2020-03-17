@@ -4,22 +4,25 @@
     class="mdc-card"
   >
     <div
-      v-if="$slots['actionableContent']"
-      ref="content"
-      :class="contentClasses"
+      v-if="primaryAction"
+      class="mdc-card__primary-action"
       tabindex="0"
+      v-on="$listeners"
     >
-      <slot name="actionableContent" />
+      <slot />
     </div>
-    <slot />
+    <slot v-else />
     <div
-      v-if="$slots['actionButtons'] || $slots['actionIcons'] || $slots['fullBleedButton']"
+      v-if="$slots['actionButtons'] || $slots['actionIcons'] || $slots['fullBleedButton'] || $slots['actions']"
       :class="actionClasses"
       class="mdc-card__actions"
     >
       <slot
-        v-if="fullBleedAction"
+        v-if="fullBleedAction && $slots['fullBleedButton']"
         name="fullBleedButton"
+      />
+      <slot
+        name="actions"
       />
       <div
         v-if="!fullBleedAction && $slots['actionButtons']"
@@ -38,8 +41,7 @@
 </template>
 
 <script>
-import { MDCRipple } from '@material/ripple'
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   mixins: [baseComponentMixin, themeClassMixin],
@@ -51,12 +53,15 @@ export default {
     fullBleedAction: {
       type: Boolean,
       default: false
+    },
+    primaryAction: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      slotObserver: undefined,
-      mdcRipple: undefined
+      slotObserver: undefined
     }
   },
   computed: {
@@ -65,23 +70,10 @@ export default {
         'mdc-card--outlined': this.outlined
       }
     },
-    contentClasses () {
-      return {
-        'mdc-card__primary-action': this.primaryAction
-      }
-    },
     actionClasses () {
       return {
         'mdc-card__actions--full-bleed': this.fullBleedAction
       }
-    },
-    primaryAction () {
-      return this.$slots.actionableContent != null
-    }
-  },
-  watch: {
-    primaryAction (value) {
-      value ? this.mdcRipple = MDCRipple.attachTo(this.$refs.content) : this.mdcRipple.destroy()
     }
   },
   mounted () {
@@ -91,14 +83,9 @@ export default {
       childList: true,
       subtree: true
     })
-
-    if (this.primaryAction) { this.mdcRipple = MDCRipple.attachTo(this.$refs.content) }
   },
   beforeDestroy () {
     this.slotObserver.disconnect()
-    if (typeof this.mdcRipple !== 'undefined') {
-      this.mdcRipple.destroy()
-    }
   },
   methods: {
     updateSlots () {
@@ -123,6 +110,14 @@ export default {
           if (n.elm && n.elm.classList) {
             n.elm.classList.add('mdc-card__action')
             n.elm.classList.add('mdc-card__action--icon')
+          }
+        })
+      }
+      if (this.$slots.actions) {
+        this.$slots.actions.forEach((n) => {
+          if (n.elm && n.elm.classList) {
+            n.elm.classList.add('mdc-card__action')
+            n.elm.classList.contains('mdc-icon-button') ? n.elm.classList.add('mdc-card__action--icon') : n.elm.classList.add('mdc-card__action--button')
           }
         })
       }

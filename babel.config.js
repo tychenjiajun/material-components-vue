@@ -7,34 +7,20 @@ module.exports = function (api) {
       presets.push([
         '@babel/preset-env',
         {
-          'targets': {
-            'node': 'current'
+          targets: {
+            node: 'current'
           }
         }
       ])
       break
     case 'development':
-      plugins.push(
-        '@babel/plugin-proposal-object-rest-spread',
-        '@babel/plugin-transform-object-assign'
-      )
       presets.push([
-        '@babel/preset-env',
-        {
-          'modules': false
-        }
+        '@babel/preset-env'
       ])
       break
     case 'production':
-      plugins.push(
-        '@babel/plugin-proposal-object-rest-spread',
-        '@babel/plugin-transform-object-assign'
-      )
       presets.push([
-        '@babel/preset-env',
-        {
-          'modules': false
-        }
+        '@babel/preset-env'
       ])
   }
 

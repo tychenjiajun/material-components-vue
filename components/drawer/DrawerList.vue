@@ -7,14 +7,10 @@
 </template>
 
 <script>
-import { baseComponentMixin, themeClassMixin } from '../base'
+import { baseComponentMixin, themeClassMixin } from '@components/base'
 
 export default {
   name: 'DrawerList',
   mixins: [baseComponentMixin, themeClassMixin]
 }
 </script>
-
-<style scoped>
-
-</style>

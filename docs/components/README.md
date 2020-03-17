@@ -28,21 +28,13 @@ The demonstration in this page is a work in progress..
 
 ## Chips
 
-### Action Chips
+### Chips
 
-<ChipsActionDemo/>
+<ChipsDemo/>
 
-### Choice Chips
+## Elevation
 
-<ChipsChoiceDemo/>
-
-### Filter Chips
-
-<ChipsFilterDemo/>
-
-### Input Chips
-
-<ChipsInputDemo/>
+<ElevationDemo/>
 
 ## Fab
 
@@ -59,6 +51,10 @@ The demonstration in this page is a work in progress..
 ## Menu
 
 <MenuDemo/>
+
+## Menu Surface
+
+<MenuSurfaceDemo/>
 
 ## Dialog
 
@@ -85,10 +81,6 @@ The demonstration in this page is a work in progress..
 ## Select Menus
 
 <SelectDemo/>
-
-## Select Helper Text
-
-<SelectHelperTextDemo/>
 
 ## Slider
 
@@ -136,9 +128,9 @@ The demonstration in this page is a work in progress..
 
 <ListWithTrailingCheckboxDemo/>
 
-## Menu Surface
+## Ripple
 
-<MenuSurfaceDemo/>
+<RippleDemo/>
 
 ## Snackbar
 
